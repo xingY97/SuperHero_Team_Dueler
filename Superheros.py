@@ -17,7 +17,7 @@ class Ability:
         attack_strength = random.randint(0,self.attack_strength)
         return attack_strength
 
-class Armor_Class:
+class Armor:
     def __init__(self,name,Max_block):
         """Instantiate instance properties.
             name: String
@@ -31,38 +31,87 @@ class Armor_Class:
         return Max_block
 
 class Hero:
-    def __init__ (self,name,current_health,starting_health=100):
-        self.ability = []
+    def __init__ (self,name,starting_health=100):
+        self.abilities = []
         self.armors = []
         self.name = name
         self.starting_health = starting_health
-        self.current_health = current_health
+        self.current_health = starting_health
+
     def add_ability (self,ability):
         #adding abilities to ability list
-        self.ability = ability
-    def armor(self,armor):
+        self.abilities.append(ability)
+
+    def add_armor(self,armor):
         #adding armors to armor list
-        self.armor = armor
+        self.armors.append(armor)
+
     def attack(self):
-        self.attack = attack
-    def defend (self,incoming_damage=0):
-        self.incoming_damage = incoming_damage
+        #This method returns the total ability attack as an integer
+        total_attack = 0
+        for attack in self.abilities:
+            total_attack += attack.attack()
+        return total_attack
+
+    def defend (self,damage_amt):
+        #runs 'block' method on each armor.
+        #Returns sum of all blocks
+        #TODO:This method should run the block method on each armor in self.armors
+        total_defend = 0
+        for defend in self.armors:
+            total_defend += defend.block()
+        return total_defend
+
     def take_damage (self,damage):
-        self.damage =damage
+        if (damage > self.defend(damage)):
+            self.current_health = self.current_health - (damage-self.defend(damage))
+        else:
+            self.current_health = self.current_health
+
     def is_alive(self):
-        self.is_alive = is_alive
+        #TODO: check whether the hero is alive and return true of false
+        is_alive = True
+        if self.current_health > 0:
+            return  True
+        else:
+            return False
+
     def fight (self,opponent):
-        self.opponent = opponent
+        #TODO:Fight each hero until a victor emerges.
+        #print the victor's name to the screen
+        while self.is_alive() == True and opponent.is_alive() == True:
+            opponent.take_damage(self.attack())
+            self.take_damage(opponent.attack())
+        if self.is_alive():
+            print(self.name + " won!")
+        else:
+            print(opponent.name  + "won!")
+       
+
         
-
-
+        
 if __name__ == "__main__":
-    my_hero = Hero("Grace Hopper",200)
-    print(my_hero.name)
-    print(my_hero.current_health)
-    """ability = Ability("Debuggin Ability", 20)
-    print(ability.name)
-    print(ability.attack())"""
+   # hero = Hero("Grace Hopper", 200)
+    #shield = Armor("shield",50)
+    #hero.add_armor(shield)
+    #hero.take_damage(150)
+   # print(hero.is_alive())
+   # hero.take_damage(15000)
+   # print(hero.is_alive())
+    hero1 = Hero("Wonder Woman",200)
+    hero2 = Hero("Dumbledore")
+    ability1 = Ability("Super Speed", 300)
+    ability2 = Ability("Super Eyes", 130)
+    ability3 = Ability("Wizard Wand", 80)
+    ability4 = Ability("Wizard Beard", 20)
+    hero1.add_ability(ability1)
+    hero1.add_ability(ability2)
+    hero2.add_ability(ability3)
+    hero2.add_ability(ability4)
+    hero1.fight(hero2)
+
+
+
 
 
 
