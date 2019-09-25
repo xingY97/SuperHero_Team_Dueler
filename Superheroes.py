@@ -1,4 +1,5 @@
 import random
+
 class Ability:
     def __init__ (self,name,attack_strength):
         """Create Instance Variables:
@@ -16,6 +17,12 @@ class Ability:
         #Hint: The constructor initializes the maximum attack value.
         attack_strength = random.randint(0,self.attack_strength)
         return attack_strength
+    
+class Weapon(Ability):
+    def attack(self):
+        """This method returns a random value between one half to the full attack power ofthe weapon.
+        """
+        return random.randint(self.strength//2,self.strength)
 
 class Armor:
     def __init__(self,name,Max_block):
@@ -86,8 +93,24 @@ class Hero:
             print(self.name + " won!")
         else:
             print(opponent.name  + "won!")
-       
 
+class Team:
+    def __init__(self, name):
+        #TODO: Implement this constructor by assigning the name and heroes.
+        self.name = name
+    def remove_hero(self,name):
+        """"remove hero from heroes list. if hero isn't found return 0"""
+        for hero in self.heroes:
+            if self.name in name:
+                self.hero.remove(hero)
+            else:
+                return 0
+    def view_all_heroes(self):
+        """print out all heroes to the console."""
+        #TODO: loop over the list of heroes and print their name to the terminal.
+        for hero in self.heroes:
+            print(heroes.name)
+    
         
         
 if __name__ == "__main__":
