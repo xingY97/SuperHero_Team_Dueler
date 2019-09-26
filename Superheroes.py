@@ -22,7 +22,7 @@ class Weapon(Ability):
     def attack(self):
         """This method returns a random value between one half to the full attack power ofthe weapon.
         """
-        return random.randint(self.strength//2,self.strength)
+        return random.randint(self.attack_strength//2,self.attack_strength)
 
 class Armor:
     def __init__(self,name,Max_block):
@@ -95,24 +95,28 @@ class Hero:
             print(opponent.name  + "won!")
 
 class Team:
-    def __init__(self, name):
+    def __init__(self,name):
         #TODO: Implement this constructor by assigning the name and heroes.
+
         self.name = name
+        self.heroes = list()
     def remove_hero(self,name):
         """"remove hero from heroes list. if hero isn't found return 0"""
         for hero in self.heroes:
-            if self.name in name:
-                self.hero.remove(hero)
-            else:
-                return 0
+            if hero.name == name:
+                self.heroes.remove(hero)
+        return 0
     def view_all_heroes(self):
         """print out all heroes to the console."""
         #TODO: loop over the list of heroes and print their name to the terminal.
-        for hero in self.heroes:
+        for heroes in self.heroes:
             print(heroes.name)
-    
-        
-        
+    def add_hero(self,hero):
+        """Add Hero object to self.heroes."""
+        #TODO: Add the hero object that is passedi n to the list of heroes in
+        self.heroes.append(hero)
+
+
 if __name__ == "__main__":
    # hero = Hero("Grace Hopper", 200)
     #shield = Armor("shield",50)
