@@ -1,4 +1,5 @@
 import random
+import copy #inspired by Joey Gaitan, Jerome Schimidt
 
 class Ability:
     def __init__ (self,name,attack_strength):
@@ -44,6 +45,17 @@ class Hero:
         self.name = name
         self.starting_health = starting_health
         self.current_health = starting_health
+        self.deaths = 0
+        self.kills = 0
+    
+    def add_kills(self, num_kills):
+        """update kills with num_kills"""
+        #TODO: This method should add the number of kills to self.kills
+        self.kills += num_kills
+    def add_death(self,num_deaths):
+        """update deaths with num_deaths"""
+        #TODO: This method should add the numbe of deaths to self.deaths
+        self.deaths += num_deaths
 
     def add_ability (self,ability):
         #adding abilities to ability list
@@ -60,7 +72,7 @@ class Hero:
             total_attack += attack.attack()
         return total_attack
 
-    def defend (self,damage_amt):
+    def defend (self,damage_amt=0):
         #runs 'block' method on each armor.
         #Returns sum of all blocks
         #TODO:This method should run the block method on each armor in self.armors
@@ -84,22 +96,30 @@ class Hero:
             return False
 
     def fight (self,opponent):
-        #TODO:Fight each hero until a victor emerges.
-        #print the victor's name to the screen
+        #TODO: Refactor this method to update the 
+        #Number of kills the hero has when opponent dies
+        #Also update the number of deaths for whoever dies in the fight
+        
         while self.is_alive() == True and opponent.is_alive() == True:
             opponent.take_damage(self.attack())
             self.take_damage(opponent.attack())
         if self.is_alive():
             print(self.name + " won!")
+            self.add_kills(1)
+            opponent.add_death(1)
         else:
             print(opponent.name  + "won!")
+            opponent.add_kills(1)
+            self.add_death(1)
 
+        
 class Team:
     def __init__(self,name):
         #TODO: Implement this constructor by assigning the name and heroes.
-
+        
         self.name = name
         self.heroes = list()
+    
     def remove_hero(self,name):
         """"remove hero from heroes list. if hero isn't found return 0"""
         for hero in self.heroes:
@@ -115,6 +135,48 @@ class Team:
         """Add Hero object to self.heroes."""
         #TODO: Add the hero object that is passedi n to the list of heroes in
         self.heroes.append(hero)
+    def attack(self, other_team):
+
+        """Battle each team against each other ."""
+        #TODO: Randomly select a living hero from each team and have
+        #Them fight until one or both teams have no surviving heroes
+        copy_my_team = copy.copy(self.heroes)
+        copy_opponents_team = copy.copy(other_team.heroes)
+        while len(copy_my_team) > 0 and len(copy_opponents_team) > 0:
+            my_team_hero = random.choice(copy_my_team)
+            other_team_hero = random.choice(copy_opponents_team)
+
+            my_team_current_deaths = my_team_hero.deaths
+            other_team_hero_deaths = other_team_hero.deaths
+
+            my_team_hero.fight(other_team_hero)
+
+            if(my_team_hero.deaths > my_team_current_deaths):
+                my_team_hero.remove(my_team_hero)
+            else:
+                copy_opponents_team.remove(other_team_hero)
+        if len(copy_my_team) == 0 or len(copy_opponents_team) != 0:
+            print(other_team.name + "won" )
+        if len(copy_my_team) != 0 or len(copy_opponents_team) == 0:
+            print(self.name + "won")
+
+        
+        
+    def revive_heroes(self, health =100):
+        """Reset all heroes health to strating_health"""
+        #TODO: This methodd should reset all heroes health to their
+        #original starting value
+        for hero in self.heroes:
+            hero.current_health = hero.starting_health
+    def stats(self):
+        """Print team statistics"""
+        #TODO: THis method should print the ratio of kills/deaths for each
+        #Member of the team to the screen
+        #This data must be output to the console
+        print("hero{}. kills{}, death{},". format(hero.name,hero.kills, hero.death))
+
+
+            
 
 
 if __name__ == "__main__":
