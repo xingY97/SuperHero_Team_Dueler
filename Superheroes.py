@@ -1,5 +1,5 @@
 import random
-import copy #inspired by Joey Gaitan, Jerome Schimidt
+#import copy #inspired by Joey Gaitan, Jerome Schimidt
 
 class Ability:
     def __init__ (self,name,attack_strength):
@@ -89,16 +89,16 @@ class Hero:
         return total_defend
 
     def take_damage (self,damage):
-        if (damage > self.defend(damage)):
-            self.current_health = self.current_health - (damage-self.defend(damage))
-        else:
-            self.current_health = self.current_health
+        self.current_health = self.current_health - self.defend(damage)
+        # if (damage > self.defend(damage)):
+        #     self.current_health = self.current_health - (damage-self.defend(damage))
+        # else:
+        #     self.current_health = self.current_health
 
     def is_alive(self):
         #TODO: check whether the hero is alive and return true of false
-        is_alive = True
         if self.current_health > 0:
-            return  True
+            return True
         else:
             return False
 
@@ -106,19 +106,26 @@ class Hero:
         #TODO: Refactor this method to update the 
         #Number of kills the hero has when opponent dies
         #Also update the number of deaths for whoever dies in the fight
-        
-        while self.is_alive() == True and opponent.is_alive() == True:
-            opponent.take_damage(self.attack())
-            self.take_damage(opponent.attack())
-        if self.is_alive():
-            print(self.name + " won!")
-            self.add_kills(1)
-            opponent.add_death(1)
-        else:
-            print(opponent.name  + "won!")
-            opponent.add_kills(1)
-            self.add_death(1)
+        is_alive = True
+        while is_alive == True:
+            if self.is_alive():
+                self_damage = self.attack()
+                opponent.take_damage(self_damage)
+            else:
+                opponent.add_kills(1)
+                self.add_death(1)
+                break
 
+            if opponent.is_alive():
+                opponent_damage = opponent.attack()
+                self.take_damage(opponent_damage)
+            else:
+                self.add_kills(1)
+                opponent.add_death(1)
+                break
+            
+
+            
         
 class Team:
     def __init__(self,name):
@@ -145,30 +152,39 @@ class Team:
         #TODO: Add the hero object that is passedi n to the list of heroes in
         
         self.heroes.append(hero)
+
     def attack(self, other_team):
+        print("attack func started")
         """Battle each team against each other ."""
         #TODO: Randomly select a living hero from each team and have
         #Them fight until one or both teams have no surviving heroes
-        copy_my_team = copy.copy(self.heroes)
-        copy_opponents_team = copy.copy(other_team.heroes)
         
-        while len(copy_my_team) > 0 and len(copy_opponents_team) > 0:
-            my_team_hero = random.choice(copy_my_team)
-            other_team_hero = random.choice(copy_opponents_team)
+        #print("copy started")
+        #copy_my_team = copy.copy(self.heroes)
+        #copy_opponents_team = copy.copy(other_team.heroes)
+        #print('copy ended')
+        
+        #while len(copy_my_team) > 0 and len(copy_opponents_team) > 0:
+            #print('in while loop')
+            #my_team_hero = random.choice(copy_my_team)
+            #other_team_hero = random.choice(copy_opponents_team)
+            #print('got choice')
 
-            my_team_current_deaths = my_team_hero.deaths
-            other_team_hero_deaths = other_team_hero.deaths
+            #my_team_current_deaths = my_team_hero.deaths
+            #other_team_hero_deaths = other_team_hero.deaths
+            #print('got deaths')
 
-            my_team_hero.fight(other_team_hero)
+            #my_team_hero.fight(other_team_hero)
+            #print('done fighting')
 
-            if(my_team_hero.deaths > my_team_current_deaths):
-                my_team_hero.remove(my_team_hero)
-            else:
-                copy_opponents_team.remove(other_team_hero)
-        if len(copy_my_team) == 0 or len(copy_opponents_team) != 0:
-            print(other_team.name + "won" )
-        if len(copy_my_team) != 0 or len(copy_opponents_team) == 0:
-            print(self.name + "won")
+            #if(my_team_hero.deaths > my_team_current_deaths):
+                #my_team_hero.remove(my_team_hero)
+            #else:
+                #copy_opponents_team.remove(other_team_hero)
+        #if len(copy_my_team) == 0 or len(copy_opponents_team) != 0:
+            #print(other_team.name + "won" )
+        #if len(copy_my_team) != 0 or len(copy_opponents_team) == 0:
+            #print(self.name + "won")
 
         
     def revive_heroes(self, health =100):
@@ -274,16 +290,17 @@ class Arena:
 
         print("stats for team one")
         team_one_heroes = 0
-        for hero in self.team_one_heroes:
+        team_two_heroes = 0
+        for hero in self.team_one.heroes:
             if hero.is_alive():
-                live_one_heroes += 1
+                team_one_heroes += 1
                 team_one_alive_heroes.append(hero.name)
                 print(hero.name + "Survived")
         print("stats for team two")
         team_two_heroes = 0
-        for hero in self.team_two_heroes:
+        for hero in self.team_two.heroes:
             if hero.is_alive():
-                live_two_heroes += 1
+                team_two_heroes += 1
                 team_two_alive_heroes.append(hero.name)
                 print(hero.name + "Survived")
 
