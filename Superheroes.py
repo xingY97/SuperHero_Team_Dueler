@@ -1,5 +1,5 @@
 import random
-#import copy #inspired by Joey Gaitan, Jerome Schimidt
+
 
 class Ability:
     def __init__ (self,name,attack_strength):
@@ -90,10 +90,6 @@ class Hero:
 
     def take_damage (self,damage):
         self.current_health = self.current_health - self.defend(damage)
-        # if (damage > self.defend(damage)):
-        #     self.current_health = self.current_health - (damage-self.defend(damage))
-        # else:
-        #     self.current_health = self.current_health
 
     def is_alive(self):
         #TODO: check whether the hero is alive and return true of false
@@ -124,8 +120,6 @@ class Hero:
                 opponent.add_death(1)
                 break
             
-
-            
         
 class Team:
     def __init__(self,name):
@@ -153,38 +147,47 @@ class Team:
         
         self.heroes.append(hero)
 
+   
+
     def attack(self, other_team):
-        print("attack func started")
         """Battle each team against each other ."""
         #TODO: Randomly select a living hero from each team and have
         #Them fight until one or both teams have no surviving heroes
+        hero_alive = []
+        opponent_alive = []
+
+        for hero in self.heroes:
+            if hero.is_alive():
+                hero_alive.append(hero)
+        return hero_alive
+
+        for hero in other_team.heroes:
+            if opponent_hero.is_alive():
+                opponent_alive.append(opponent_hero)
+        return opponent_alive
+
+        while len(hero_alive) > 0 and len(opponent_alive) > 0:
+            random_hero_1 = random.choice(hero_alive)
+            random_hero_2 = random.choice(opponent_alive)
+
+            random_hero_1.fight(random_hero_2)
+
+            for random_hero_1 in self.heroes:
+                if random_hero_1.current_health < 0:
+                    hero_alive.remove(self.heroes.index(random_hero_1))
+
+            for random_hero_2 in other_team.heroes:
+                if random_hero_2.current_health < 0:
+                    opponent_alive.remove(self.heroes.index(random_hero_2))
         
-        #print("copy started")
-        #copy_my_team = copy.copy(self.heroes)
-        #copy_opponents_team = copy.copy(other_team.heroes)
-        #print('copy ended')
-        
-        #while len(copy_my_team) > 0 and len(copy_opponents_team) > 0:
-            #print('in while loop')
-            #my_team_hero = random.choice(copy_my_team)
-            #other_team_hero = random.choice(copy_opponents_team)
-            #print('got choice')
+        if len(hero_alive) > 0:
+            return self.name
+        elif len(opponent_alive) > 0:
+            return other_team.name
+        elif len(hero_alive) == len(opponent_alive):
+            return "Draw!"
 
-            #my_team_current_deaths = my_team_hero.deaths
-            #other_team_hero_deaths = other_team_hero.deaths
-            #print('got deaths')
 
-            #my_team_hero.fight(other_team_hero)
-            #print('done fighting')
-
-            #if(my_team_hero.deaths > my_team_current_deaths):
-                #my_team_hero.remove(my_team_hero)
-            #else:
-                #copy_opponents_team.remove(other_team_hero)
-        #if len(copy_my_team) == 0 or len(copy_opponents_team) != 0:
-            #print(other_team.name + "won" )
-        #if len(copy_my_team) != 0 or len(copy_opponents_team) == 0:
-            #print(self.name + "won")
 
         
     def revive_heroes(self, health =100):
@@ -203,8 +206,8 @@ class Arena:
     def __init__(self):
         """instantiate properties"""
         #TODO: create instance variabls name team_one and two
-        self.team_one = None
-        self.team_two = None
+        #self.team_one = team_one
+        #self.team_two = team_two
 
         self.team_one = Team("team1")
         self.team_two = Team("team2")
@@ -246,7 +249,7 @@ class Arena:
         if add_weapon.lower() == "Y":
             Weapon = self.create_weapon()
             new_hero.add_weapon(Weapon)
-
+            print("Weapon added")
 
         return new_hero
 
@@ -261,6 +264,7 @@ class Arena:
         for i in range(team_one_amount):
             team1_hero = self.create_hero()
             self.team_one.add_hero(team1_hero)
+        
             
     def build_team_two(self):
         """promp the user to build team_two"""
@@ -273,6 +277,7 @@ class Arena:
         for i in range(team_two_amount):
             team2_hero = self.create_hero()
             self.team_two.add_hero(team2_hero)
+        
 
     def team_battle(self):
         """Battle team_one and team_two together."""
@@ -296,6 +301,8 @@ class Arena:
                 team_one_heroes += 1
                 team_one_alive_heroes.append(hero.name)
                 print(hero.name + "Survived")
+
+        print("--------------------------------")
         print("stats for team two")
         team_two_heroes = 0
         for hero in self.team_two.heroes:
@@ -337,6 +344,8 @@ if __name__ == "__main__":
     arena.build_team_two()
     arena.team_battle()
     arena.show_stats()
+
+
 
 
 
