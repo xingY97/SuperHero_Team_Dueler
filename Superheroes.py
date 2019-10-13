@@ -159,46 +159,10 @@ class Team:
         while len(self.list_for_living_heroes()) >0 and len(other_team.list_for_living_heroes())>0:
             random_hero_1 = random.choice(self.list_for_living_heroes())
             random_hero_2 = random.choice(other_team.list_for_living_heroes())
-        
-            #self_current_deaths = random_hero_1.deaths
-            #other_team_current_deaths = random_hero_2.deaths
+    
 
             random_hero_1.fight(random_hero_2)
     
-                    
-        # hero_alive = []
-        # opponent_alive = []
-
-        # for hero in self.heroes:
-        #     if hero.is_alive():
-        #         hero_alive.append(hero)
-        # return hero_alive
-
-        # for hero in other_team.heroes:
-        #     if opponent_hero.is_alive():
-        #         opponent_alive.append(opponent_hero)
-        # return opponent_alive
-
-        # while len(hero_alive) > 0 and len(opponent_alive) > 0:
-        #     random_hero_1 = random.choice(hero_alive)
-        #     random_hero_2 = random.choice(opponent_alive)
-
-        #     random_hero_1.fight(random_hero_2)
-
-        #     for random_hero_1 in self.heroes:
-        #         if random_hero_1.current_health < 0:
-        #             hero_alive.remove(self.heroes.index(random_hero_1))
-
-        #     for random_hero_2 in other_team.heroes:
-        #         if random_hero_2.current_health < 0:
-        #             opponent_alive.remove(self.heroes.index(random_hero_2))
-        
-        # if len(hero_alive) > 0:
-        #     return self.name
-        # elif len(opponent_alive) > 0:
-        #     return other_team.name
-        # elif len(hero_alive) == len(opponent_alive):
-        #     return "Draw!"
 
     def revive_heroes(self, health =100):
         """Reset all heroes health to strating_health"""
@@ -271,7 +235,7 @@ class Arena:
 
     def build_team_one(self):
         """promp the user to build team_one"""
-        name = input("Enter team name: ")
+        name = input("Enter team one name: ")
         self.team_one = Team(name)
         hero_alive = int(input("How many heroes in team one? : "))
         for x in range(hero_alive):
@@ -280,7 +244,7 @@ class Arena:
             
     def build_team_two(self):
         """promp the user to build team_two"""
-        name = input("Enter Team Name: ")
+        name = input("Enter Team two Name: ")
         self.team_two = Team(name)
         hero_alive = int(input("How many heroes in team two ?: "))
         for x in range(hero_alive):
@@ -302,52 +266,34 @@ class Arena:
         self.team_two.stats()
 
 
-
-
 if __name__ == "__main__":
-   # hero = Hero("Grace Hopper", 200)
-    #shield = Armor("shield",50)
-    #hero.add_armor(shield)
-    #hero.take_damage(150)
-   # print(hero.is_alive())
-   # hero.take_damage(15000)
-   # print(hero.is_alive())
-    #hero1 = Hero("Wonder Woman",200)
-    #hero2 = Hero("Dumbledore")
-    #ability1 = Ability("Super Speed", 300)
-    #ability2 = Ability("Super Eyes", 130)
-    #ability3 = Ability("Wizard Wand", 80)
-    #ability4 = Ability("Wizard Beard", 20)
-    #hero1.add_ability(ability1)
-    #hero1.add_ability(ability2)
-    #hero2.add_ability(ability3)
-    #hero2.add_ability(ability4)
-    #hero1.fight(hero2)
+    game_is_running = True
+
+    # Instantiate Game Arena
     arena = Arena()
+
+    #Build Teams
     arena.build_team_one()
     arena.build_team_two()
-    arena.team_battle()
-    arena.show_stats()
-    # game_is_running = True
 
-    #Instantiate Game Arena
-    # arena = Arena()
-    #build Teams
-    # arena.build_team_one()
-    # arena.build_team_two()
-    # while game_is_running:
-        
-    #     arena.team_battle()
-    #     arena.show_stats()
-    #     play_again = input("play Again? Y or N: ")
+    while game_is_running:
 
-        #check for player Input
-        # if play_again.lower() == "n":
-        #     game_is_running = False
-        # else:
-        #     #revive heroes to play again
-        #     arena.team_one.revive_heroes()
-        #     arena.team.two.revive_heroes()
+        arena.team_battle()
+        arena.show_stats()
+        play_again = input("Play Again? Y or N: ")
+
+        #Check for Player Input
+        if play_again.lower() == "n":
+            game_is_running = False
+
+        else:
+            #Revive heroes to play again
+            arena.team_one.revive_heroes()
+            arena.team_two.revive_heroes()
+    
+
+
+  
 
 
 
